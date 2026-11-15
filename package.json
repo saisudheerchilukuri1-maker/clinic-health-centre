@@ -1,0 +1,38 @@
+{
+  "name": "clinic-health-centre",
+  "version": "1.0.0",
+  "description": "Clinic Health Centre Backend REST API with Express and SQLite",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:init": "node database/initDb.js",
+    "db:seed": "node database/seedData.js",
+    "verify": "node database/verifyDb.js && node database/liveApiCheck.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit"
+  },
+  "keywords": [
+    "express",
+    "sqlite",
+    "better-sqlite3",
+    "rest-api",
+    "clinic"
+  ],
+  "author": "Sai Sudheer",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^13.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "testTimeout": 10000
+  }
+}

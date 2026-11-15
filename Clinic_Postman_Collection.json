@@ -1,0 +1,771 @@
+{
+  "info": {
+    "_postman_id": "c1f72a49-4e78-4eb1-b0db-6e9f1a234567",
+    "name": "Clinic Health Centre API",
+    "description": "Comprehensive Postman collection for the Clinic Health Centre REST API backend with SQLite database, soft-delete, search, and SQL JOIN capabilities.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check",
+      "item": [
+        {
+          "name": "GET Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check if Clinic API server is running and healthy."
+          },
+          "response": [
+            {
+              "name": "200 Health OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/health"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"status\": \"OK\",\n  \"service\": \"Clinic Health Centre API\",\n  \"uptime\": 12.34,\n  \"timestamp\": \"2026-11-15T10:00:00.000Z\",\n  \"message\": \"Clinic Health Centre API is healthy and operational\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1. Doctors API",
+      "item": [
+        {
+          "name": "GET All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors",
+              "host": ["{{base_url}}"],
+              "path": ["doctors"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Doctors List",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/doctors"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"count\": 5,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Dr. Sarah Jenkins\",\n      \"specialization\": \"Cardiology\",\n      \"created_at\": \"2026-11-15 10:00:00\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Doctors by Specialization (Search)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors?specialization=Cardiology",
+              "host": ["{{base_url}}"],
+              "path": ["doctors"],
+              "query": [
+                {
+                  "key": "specialization",
+                  "value": "Cardiology"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Search Result",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/doctors?specialization=Cardiology"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Dr. Sarah Jenkins\",\n      \"specialization\": \"Cardiology\",\n      \"created_at\": \"2026-11-15 10:00:00\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Doctor by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors/1",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK - Single Doctor",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/doctors/1"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Dr. Sarah Jenkins\",\n    \"specialization\": \"Cardiology\",\n    \"created_at\": \"2026-11-15 10:00:00\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST Create Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Gregory House\",\n  \"specialization\": \"Diagnostic Medicine\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctors",
+              "host": ["{{base_url}}"],
+              "path": ["doctors"]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created Doctor",
+              "originalRequest": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": "{{base_url}}/doctors",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Dr. Gregory House\",\n  \"specialization\": \"Diagnostic Medicine\"\n}"
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Doctor created successfully\",\n  \"data\": {\n    \"id\": 6,\n    \"name\": \"Dr. Gregory House\",\n    \"specialization\": \"Diagnostic Medicine\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT Update Doctor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Sarah Jenkins-Taylor\",\n  \"specialization\": \"Pediatric Cardiology\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctors/1",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Updated Doctor",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": "{{base_url}}/doctors/1"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Doctor updated successfully\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Dr. Sarah Jenkins-Taylor\",\n    \"specialization\": \"Pediatric Cardiology\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE Doctor by ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors/6",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "6"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Deleted Doctor",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{base_url}}/doctors/6"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Doctor with ID 6 deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "ERROR - Validation Missing Name (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"specialization\": \"Cardiology\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctors",
+              "host": ["{{base_url}}"],
+              "path": ["doctors"]
+            }
+          },
+          "response": [
+            {
+              "name": "400 Validation Error",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed for doctor data.\",\n  \"errors\": [\n    \"Doctor name is required.\"\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "ERROR - Doctor Not Found (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors/999",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "999"]
+            }
+          },
+          "response": [
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Doctor with ID 999 not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "ERROR - Delete Doctor with Bookings (409)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors/1",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "409 Conflict",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Cannot delete doctor with ID 1 because active bookings are assigned to this doctor.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Rooms API & Search",
+      "item": [
+        {
+          "name": "GET All Active Rooms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rooms",
+              "host": ["{{base_url}}"],
+              "path": ["rooms"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Active Rooms",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"count\": 5,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Consultation Room A\",\n      \"floor\": 1,\n      \"is_deleted\": 0,\n      \"created_at\": \"2026-11-15 10:00:00\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Rooms by Floor (Search: Floor 2)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rooms?floor=2",
+              "host": ["{{base_url}}"],
+              "path": ["rooms"],
+              "query": [
+                {
+                  "key": "floor",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Floor 2 Active Rooms",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"count\": 2,\n  \"data\": [\n    {\n      \"id\": 3,\n      \"name\": \"Cardiology Suite\",\n      \"floor\": 2,\n      \"is_deleted\": 0\n    },\n    {\n      \"id\": 4,\n      \"name\": \"Pediatric Clinic\",\n      \"floor\": 2,\n      \"is_deleted\": 0\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Room by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rooms/1",
+              "host": ["{{base_url}}"],
+              "path": ["rooms", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Single Room",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Consultation Room A\",\n    \"floor\": 1,\n    \"is_deleted\": 0\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST Create Room",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Emergency Room A\",\n  \"floor\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/rooms",
+              "host": ["{{base_url}}"],
+              "path": ["rooms"]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created Room",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Room created successfully\",\n  \"data\": {\n    \"id\": 6,\n    \"name\": \"Emergency Room A\",\n    \"floor\": 1,\n    \"is_deleted\": 0\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT Update Room",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Consultation Suite A1\",\n  \"floor\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/rooms/1",
+              "host": ["{{base_url}}"],
+              "path": ["rooms", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Updated Room",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Room updated successfully\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Consultation Suite A1\",\n    \"floor\": 1\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Bookings API",
+      "item": [
+        {
+          "name": "GET All Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["bookings"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Bookings List",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"count\": 10,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"doctor_id\": 1,\n      \"room_id\": 1,\n      \"booking_date\": \"2026-11-20\",\n      \"booking_time\": \"09:00\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bookings/1",
+              "host": ["{{base_url}}"],
+              "path": ["bookings", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Single Booking",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"doctor_id\": 1,\n    \"room_id\": 1,\n    \"booking_date\": \"2026-11-20\",\n    \"booking_time\": \"09:00\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_id\": 2,\n  \"room_id\": 3,\n  \"booking_date\": \"2026-12-10\",\n  \"booking_time\": \"14:30\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["bookings"]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created Booking",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Booking created successfully\",\n  \"data\": {\n    \"id\": 11,\n    \"doctor_id\": 2,\n    \"room_id\": 3,\n    \"booking_date\": \"2026-12-10\",\n    \"booking_time\": \"14:30\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT Update Booking",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_id\": 2,\n  \"room_id\": 3,\n  \"booking_date\": \"2026-12-10\",\n  \"booking_time\": \"15:30\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings/11",
+              "host": ["{{base_url}}"],
+              "path": ["bookings", "11"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Updated Booking",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Booking updated successfully\",\n  \"data\": {\n    \"id\": 11,\n    \"doctor_id\": 2,\n    \"room_id\": 3,\n    \"booking_date\": \"2026-12-10\",\n    \"booking_time\": \"15:30\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bookings/11",
+              "host": ["{{base_url}}"],
+              "path": ["bookings", "11"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Deleted Booking",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Booking with ID 11 deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "ERROR - Conflicting Room Booking (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_id\": 2,\n  \"room_id\": 1,\n  \"booking_date\": \"2026-11-20\",\n  \"booking_time\": \"09:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["bookings"]
+            }
+          },
+          "response": [
+            {
+              "name": "409 Room Conflict",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Conflict: Room 'Consultation Room A' (ID 1) is already booked on 2026-11-20 at 09:00.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "ERROR - Conflicting Doctor Booking (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_id\": 1,\n  \"room_id\": 2,\n  \"booking_date\": \"2026-11-20\",\n  \"booking_time\": \"09:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["bookings"]
+            }
+          },
+          "response": [
+            {
+              "name": "409 Doctor Conflict",
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Conflict: Dr. Dr. Sarah Jenkins (ID 1) already has another booking on 2026-11-20 at 09:00.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "ERROR - Invalid Doctor ID (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_id\": 999,\n  \"room_id\": 1,\n  \"booking_date\": \"2026-12-01\",\n  \"booking_time\": \"10:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["bookings"]
+            }
+          },
+          "response": [
+            {
+              "name": "400 Bad Doctor ID",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Doctor with ID 999 does not exist.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. SQL JOIN Details",
+      "item": [
+        {
+          "name": "GET 3-Table SQL JOIN Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bookings/details",
+              "host": ["{{base_url}}"],
+              "path": ["bookings", "details"]
+            },
+            "description": "Joins doctors, rooms, and bookings tables returning booking_id, booking_date, booking_time, doctor_name, specialization, room_name, floor."
+          },
+          "response": [
+            {
+              "name": "200 OK - SQL JOIN Details",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"count\": 10,\n  \"data\": [\n    {\n      \"booking_id\": 1,\n      \"booking_date\": \"2026-11-20\",\n      \"booking_time\": \"09:00\",\n      \"doctor_name\": \"Dr. Sarah Jenkins\",\n      \"specialization\": \"Cardiology\",\n      \"room_name\": \"Consultation Room A\",\n      \"floor\": 1\n    },\n    {\n      \"booking_id\": 2,\n      \"booking_date\": \"2026-11-20\",\n      \"booking_time\": \"09:30\",\n      \"doctor_name\": \"Dr. Marcus Vance\",\n      \"specialization\": \"Neurology\",\n      \"room_name\": \"Consultation Room B\",\n      \"floor\": 1\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Soft Delete and Restore (Compulsory)",
+      "description": "Mandatory 4-step sequence demonstrating soft delete and restore operations on rooms.",
+      "item": [
+        {
+          "name": "Step 1: DELETE /rooms/3 (Soft Delete Room 3)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rooms/3",
+              "host": ["{{base_url}}"],
+              "path": ["rooms", "3"]
+            },
+            "description": "Sets is_deleted = 1 without permanently deleting the room. Returns 200 OK."
+          },
+          "response": [
+            {
+              "name": "200 Soft Deleted",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Room with ID 3 soft-deleted successfully\",\n  \"data\": {\n    \"id\": 3,\n    \"is_deleted\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Step 2: GET /rooms/3 (Expect 404 Not Found)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rooms/3",
+              "host": ["{{base_url}}"],
+              "path": ["rooms", "3"]
+            },
+            "description": "Room 3 is soft-deleted, so GET /rooms/3 must return 404 Not Found."
+          },
+          "response": [
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Room with ID 3 not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Step 3: POST /rooms/3/restore (Restore Room 3)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rooms/3/restore",
+              "host": ["{{base_url}}"],
+              "path": ["rooms", "3", "restore"]
+            },
+            "description": "Restores room 3 by setting is_deleted = 0. Returns 200 OK."
+          },
+          "response": [
+            {
+              "name": "200 Restored",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Room with ID 3 restored successfully\",\n  \"data\": {\n    \"id\": 3,\n    \"name\": \"Cardiology Suite\",\n    \"floor\": 2,\n    \"is_deleted\": 0,\n    \"created_at\": \"2026-11-15 10:00:00\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Step 4: GET /rooms/3 (Expect 200 OK)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/rooms/3",
+              "host": ["{{base_url}}"],
+              "path": ["rooms", "3"]
+            },
+            "description": "Room 3 is now restored, so GET /rooms/3 returns 200 OK with full details."
+          },
+          "response": [
+            {
+              "name": "200 OK Active Room",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 3,\n    \"name\": \"Cardiology Suite\",\n    \"floor\": 2,\n    \"is_deleted\": 0,\n    \"created_at\": \"2026-11-15 10:00:00\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
